@@ -7,6 +7,8 @@ services:
       - '5432:5432'
     volumes:
       - postgres-data:/var/lib/postgresql
+    networks:
+      - starter-network
 
   pgadmin:
     image: dpage/pgadmin4
@@ -16,7 +18,16 @@ services:
       - '8080:80'
     volumes:
       - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - starter-network
 
 volumes:
   postgres-data:
   pgadmin-data:
+
+networks:
+  starter-network:
+    name: starter-network
+    driver: bridge
