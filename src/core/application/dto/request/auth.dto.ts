@@ -7,9 +7,16 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  Length,
+  Matches,
 } from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
 import { UserRoleEnum } from '@/src/core/domain/enums/user.enum';
+
+const PASSWORD_REGEX =
+  /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-={};':"\\|,.<>?/])/;
+const PASSWORD_MESSAGE =
+  'Password must include at least one uppercase letter, one number, and one special character';
 
 export class RegisterUserDto {
   @ApiProperty({
@@ -54,6 +61,8 @@ export class RegisterUserDto {
     required: true,
   })
   @IsNotEmpty()
+  @Length(8, 128, { message: 'Password must be at least 8 characters long' })
+  @Matches(PASSWORD_REGEX, { message: PASSWORD_MESSAGE })
   @IsString()
   password: string;
 
